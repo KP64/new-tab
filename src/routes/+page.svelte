@@ -166,10 +166,11 @@
   setInterval(getDateTime, 1000);
 </script>
 
-<body class="h-screen bg-base font-mono text-text">
+<body class="h-screen select-none bg-base font-mono text-text">
   <div class="items-top flex h-2/3 items-center justify-center">
     <img
       src={weatherIcons[`/src/lib/assets/weather/${icon}.svg`]}
+      draggable="false"
       alt="Weather Condition"
       class="size-52"
     />
@@ -178,18 +179,18 @@
 
   <div class="flex w-full justify-around">
     <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://github.com/">
-        <img src={Github} alt="Github Logo" class="size-40" />
+      <a href="https://github.com/" draggable="false">
+        <img src={Github} alt="Github Logo" draggable="false" class="size-40" />
       </a>
     </div>
     <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://www.youtube.com/">
-        <img src={Youtube} alt="Youtube Logo" class="size-40" />
+      <a href="https://www.youtube.com/" draggable="false">
+        <img src={Youtube} alt="Youtube Logo" draggable="false" class="size-40" />
       </a>
     </div>
     <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://www.twitch.tv/">
-        <img src={Twitch} alt="Twitch Logo" class="size-40" />
+      <a href="https://www.twitch.tv/" draggable="false">
+        <img src={Twitch} alt="Twitch Logo" draggable="false" class="size-40" />
       </a>
     </div>
   </div>
