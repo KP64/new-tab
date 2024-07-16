@@ -17,6 +17,7 @@
             nixfmt-rfc-style
             bun
             nodejs
+            svelte-language-server
           ];
 
           LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
