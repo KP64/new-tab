@@ -4,15 +4,13 @@
   import type { PageData } from "./$types";
   export let data: PageData;
 
-  import Github from "$lib/assets/social-media/github.svg";
-  import Youtube from "$lib/assets/social-media/youtube.svg";
-  import Twitch from "$lib/assets/social-media/twitch.svg";
   import { invalidate } from "$app/navigation";
 
-  const weatherIcons: any = import.meta.glob(
-    ["$lib/assets/weather/**.jpg", "$lib/assets/weather/**.png", "$lib/assets/weather/**.svg"],
-    { eager: true, query: "?url", import: "default" }
-  );
+  const icons: any = import.meta.glob(["$lib/assets/**/*.svg"], {
+    eager: true,
+    query: "?url",
+    import: "default"
+  });
 
   let icon = "not-available";
 
@@ -36,122 +34,50 @@
     const cloudPercentage: number = current["cloud"];
     const isCloudy = cloudPercentage > 80;
 
-    switch (true) {
-      case weatherCode === 1000:
-        icon = `clear-${dayPostfix}`;
-        break;
-
-      case weatherCode === 1003:
-        icon = `partly-cloudy-${dayPostfix}`;
-        break;
-
-      case weatherCode === 1006:
-        icon = "cloudy";
-        break;
-
-      case weatherCode === 1009:
-        icon = isCloudy ? "overcast" : `overcast-${dayPostfix}`;
-        break;
-
-      case weatherCode === 1030:
-        icon = "mist";
-        break;
-
-      case weatherCode === 1063:
-        icon = `partly-cloudy-${dayPostfix}-rain`;
-        break;
-
-      case weatherCode === 1066:
-        icon = `partly-cloudy-${dayPostfix}-snow`;
-        break;
-
-      case [1069, 1072].includes(weatherCode):
-        icon = `partly-cloudy-${dayPostfix}-sleet`;
-        break;
-
-      case weatherCode === 1087:
-        icon = `thunderstorms-${dayPostfix}`;
-        break;
-
-      case weatherCode === 1114:
-        icon = isCloudy ? "snow" : `partly-cloudy-${dayPostfix}-snow`;
-        break;
-
-      case weatherCode === 1117:
-        icon = "snow";
-        break;
-
-      case [1135, 1147].includes(weatherCode):
-        icon = isCloudy ? "fog" : `fog-${dayPostfix}`;
-        break;
-
-      case [1150, 1153].includes(weatherCode):
-        icon = `partly-cloudy-${dayPostfix}-drizzle`;
-        break;
-
-      case [1168, 1171].includes(weatherCode):
-        icon = "sleet";
-        break;
-
-      case weatherCode === 1180:
-        icon = `partly-cloudy-${dayPostfix}-drizzle`;
-        break;
-
-      case weatherCode === 1183:
-        icon = isCloudy ? "rain" : `partly-cloudy-${dayPostfix}-drizzle`;
-        break;
-
-      case [1186, 1192].includes(weatherCode):
-        icon = isCloudy ? "rain" : `partly-cloudy-${dayPostfix}-rain`;
-        break;
-
-      case [1189, 1195].includes(weatherCode):
-        icon = "rain";
-        break;
-
-      case [1198, 1201, 1204, 1207].includes(weatherCode):
-        icon = isCloudy ? "sleet" : `partly-cloudy-${dayPostfix}-sleet`;
-        break;
-
-      case [1210, 1213, 1216, 1222, 1237].includes(weatherCode):
-        icon = isCloudy ? "snow" : `partly-cloudy-${dayPostfix}-snow`;
-        break;
-
-      case [1219, 1225].includes(weatherCode):
-        icon = "snow";
-        break;
-
-      case [1240, 1243, 1246].includes(weatherCode):
-        icon = "rain";
-        break;
-
-      case [1249, 1252].includes(weatherCode):
-        icon = "sleet";
-        break;
-
-      case [1255, 1256, 1261, 1264].includes(weatherCode):
-        icon = "snow";
-        break;
-
-      case weatherCode === 1273:
-        icon = `thunderstorms-${dayPostfix}-rain`;
-        break;
-
-      case weatherCode === 1276:
-        icon = "thunderstorms-rain";
-        break;
-
-      case weatherCode === 1279:
-        icon = `thunderstorms-${dayPostfix}-rain`;
-        break;
-
-      case weatherCode === 1282:
-        icon = "thunderstorms-snow";
-        break;
-
-      default:
-        icon = "not-available";
-        break;
+    if (weatherCode === 1000) {
+      icon = `clear-${dayPostfix}`;
+    } else if (weatherCode === 1003) {
+      icon = `partly-cloudy-${dayPostfix}`;
+    } else if (weatherCode === 1006) {
+      icon = "cloudy";
+    } else if (weatherCode === 1009) {
+      icon = isCloudy ? "overcast" : `overcast-${dayPostfix}`;
+    } else if (weatherCode === 1030) {
+      icon = "mist";
+    } else if (weatherCode === 1063) {
+      icon = `partly-cloudy-${dayPostfix}-rain`;
+    } else if (weatherCode === 1066) {
+      icon = `partly-cloudy-${dayPostfix}-snow`;
+    } else if ([1069, 1072].includes(weatherCode)) {
+      icon = `partly-cloudy-${dayPostfix}-sleet`;
+    } else if (weatherCode === 1087) {
+      icon = `thunderstorms-${dayPostfix}`;
+    } else if ([1114, 1210, 1213, 1216, 1222, 1237].includes(weatherCode)) {
+      icon = isCloudy ? "snow" : `partly-cloudy-${dayPostfix}-snow`;
+    } else if ([1117, 1219, 1225, 1255, 1256, 1261, 1264].includes(weatherCode)) {
+      icon = "snow";
+    } else if ([1135, 1147].includes(weatherCode)) {
+      icon = isCloudy ? "fog" : `fog-${dayPostfix}`;
+    } else if ([1150, 1153, 1180].includes(weatherCode)) {
+      icon = `partly-cloudy-${dayPostfix}-drizzle`;
+    } else if ([1168, 1171, 1249, 1252].includes(weatherCode)) {
+      icon = "sleet";
+    } else if (weatherCode === 1183) {
+      icon = isCloudy ? "rain" : `partly-cloudy-${dayPostfix}-drizzle`;
+    } else if ([1186, 1192].includes(weatherCode)) {
+      icon = isCloudy ? "rain" : `partly-cloudy-${dayPostfix}-rain`;
+    } else if ([1189, 1195, 1240, 1243, 1246].includes(weatherCode)) {
+      icon = "rain";
+    } else if ([1198, 1201, 1204, 1207].includes(weatherCode)) {
+      icon = isCloudy ? "sleet" : `partly-cloudy-${dayPostfix}-sleet`;
+    } else if ([1273, 1279].includes(weatherCode)) {
+      icon = `thunderstorms-${dayPostfix}-rain`;
+    } else if (weatherCode === 1276) {
+      icon = "thunderstorms-rain";
+    } else if (weatherCode === 1282) {
+      icon = "thunderstorms-snow";
+    } else {
+      icon = "not-available";
     }
   }
 
@@ -164,12 +90,19 @@
   }
   onMount(getDateTime);
   setInterval(getDateTime, 1000);
+
+  let txt = "";
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.code === "Enter") {
+      window.location.href = txt;
+    }
+  }
 </script>
 
 <body class="h-screen select-none bg-base font-mono text-text">
-  <div class="items-top flex h-2/3 items-center justify-center">
+  <div class="items-top flex h-1/3 items-center justify-center">
     <img
-      src={weatherIcons[`/src/lib/assets/weather/${icon}.svg`]}
+      src={icons[`/src/lib/assets/weather/${icon}.svg`]}
       draggable="false"
       alt="Weather Condition"
       class="size-52"
@@ -177,21 +110,21 @@
     <p class="text-5xl">{datetime}</p>
   </div>
 
-  <div class="flex w-full justify-around">
-    <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://github.com/" draggable="false">
-        <img src={Github} alt="Github Logo" draggable="false" class="size-40" />
-      </a>
-    </div>
-    <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://www.youtube.com/" draggable="false">
-        <img src={Youtube} alt="Youtube Logo" draggable="false" class="size-40" />
-      </a>
-    </div>
-    <div class="rounded-xl bg-surface0 text-center text-text hover:bg-inherit">
-      <a href="https://www.twitch.tv/" draggable="false">
-        <img src={Twitch} alt="Twitch Logo" draggable="false" class="size-40" />
-      </a>
-    </div>
+  <div class="my-20 flex h-10 w-full items-center justify-center">
+    <!-- svelte-ignore a11y-autofocus -->
+    <input
+      type="search"
+      list="top-sites"
+      autofocus
+      placeholder="'s' to search"
+      bind:value={txt}
+      on:keydown|trusted={handleKeyDown}
+      class="block h-10 w-1/2 rounded-md bg-surface0"
+    />
   </div>
+  <datalist id="top-sites">
+    <option value="https://github.com">Github</option>
+    <option value="https://twitch.tv">Twitch</option>
+    <option value="https://youtube.com">youtube</option>
+  </datalist>
 </body>
