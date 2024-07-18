@@ -108,10 +108,7 @@
   $: filteredSites =
     lwrTxt === ""
       ? []
-      : sites.filter(({ name }) => {
-          const lwrName = name.toLowerCase();
-          return lwrName.includes(lwrTxt) && lwrName !== lwrTxt;
-        });
+      : sites.filter(({ name }) => name.toLowerCase().includes(lwrTxt));
 
   function handleKeyDown(e: KeyboardEvent) {
     console.debug(filteredSites);
