@@ -114,7 +114,7 @@
         });
 
   function handleKeyDown(e: KeyboardEvent) {
-    console.log(filteredSites);
+    console.debug(filteredSites);
     if (e.code !== "Enter") {
       return;
     }
