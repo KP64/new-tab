@@ -92,9 +92,35 @@
   setInterval(getDateTime, 1000);
 
   let txt = "";
+  $: sanitizedTxt = txt.toLowerCase().trim();
+
+  type Site = { name: string; url: string };
+  const sites: Site[] = [
+    { name: "Youtube", url: "https://youtube.com" },
+    { name: "GitHub", url: "https://github.com" },
+    { name: "Twitch", url: "https://twitch.tv" }
+  ];
+
+  $: filteredSites = sites
+    .map((site) => ({
+      name: site.name.toLowerCase(),
+      url: site.url
+    }))
+    .filter((site) => site.name.indexOf(sanitizedTxt) !== -1);
+
   function handleKeyDown(e: KeyboardEvent) {
-    if (e.code === "Enter") {
-      window.location.href = txt;
+    console.log(filteredSites);
+    if (e.code !== "Enter" || sanitizedTxt.length === 0) {
+      return;
+    }
+
+    if (filteredSites.length !== 0) {
+      window.location.href = filteredSites[0].url;
+    } else {
+      const encoded = encodeURI(
+        `https://search.sapti.me/search?q=${txt}&category_general=&language=auto&time_range=&safesearch=2&theme=simple`
+      );
+      window.location.href = encoded;
     }
   }
 </script>
@@ -110,21 +136,21 @@
     <p class="text-5xl">{datetime}</p>
   </div>
 
-  <div class="my-20 flex h-10 w-full items-center justify-center">
+  <div class="my-20 flex w-full flex-col items-center justify-center">
     <!-- svelte-ignore a11y-autofocus -->
     <input
       type="search"
-      list="top-sites"
       autofocus
       placeholder="'s' to search"
       bind:value={txt}
-      on:keydown|trusted={handleKeyDown}
+      on:keyup|trusted={handleKeyDown}
       class="block h-10 w-1/2 rounded-md bg-surface0"
     />
+
+    {#if sanitizedTxt.length !== 0}
+      {#each filteredSites as site}
+        <p>{site.name}</p>
+      {/each}
+    {/if}
   </div>
-  <datalist id="top-sites">
-    <option value="https://github.com">Github</option>
-    <option value="https://twitch.tv">Twitch</option>
-    <option value="https://youtube.com">youtube</option>
-  </datalist>
 </body>
