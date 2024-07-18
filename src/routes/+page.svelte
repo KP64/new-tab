@@ -92,25 +92,30 @@
   setInterval(getDateTime, 1000);
 
   let txt = "";
-  $: sanitizedTxt = txt.toLowerCase().trim();
+  $: lwrTxt = txt.toLowerCase();
 
-  type Site = { name: string; url: string };
+  import Youtube from "$lib/assets/social-media/youtube.svg";
+  import GitHub from "$lib/assets/social-media/github.svg";
+  import Twitch from "$lib/assets/social-media/twitch.svg";
+
+  type Site = { name: string; url: string; icon: string };
   const sites: Site[] = [
-    { name: "Youtube", url: "https://youtube.com" },
-    { name: "GitHub", url: "https://github.com" },
-    { name: "Twitch", url: "https://twitch.tv" }
+    { name: "Youtube", url: "https://youtube.com", icon: Youtube },
+    { name: "GitHub", url: "https://github.com", icon: GitHub },
+    { name: "Twitch", url: "https://twitch.tv", icon: Twitch }
   ];
 
-  $: filteredSites = sites
-    .map((site) => ({
-      name: site.name.toLowerCase(),
-      url: site.url
-    }))
-    .filter((site) => site.name.indexOf(sanitizedTxt) !== -1);
+  $: filteredSites =
+    lwrTxt === ""
+      ? []
+      : sites.filter(({ name }) => {
+          const lwrName = name.toLowerCase();
+          return lwrName.includes(lwrTxt) && lwrName !== lwrTxt;
+        });
 
   function handleKeyDown(e: KeyboardEvent) {
     console.log(filteredSites);
-    if (e.code !== "Enter" || sanitizedTxt.length === 0) {
+    if (e.code !== "Enter") {
       return;
     }
 
@@ -136,7 +141,7 @@
     <p class="text-5xl">{datetime}</p>
   </div>
 
-  <div class="my-20 flex w-full flex-col items-center justify-center">
+  <div class="my-20 flex flex-col items-center *:h-10 *:w-1/2 *:border-lavender *:bg-surface0">
     <!-- svelte-ignore a11y-autofocus -->
     <input
       type="search"
@@ -144,13 +149,19 @@
       placeholder="'s' to search"
       bind:value={txt}
       on:keyup|trusted={handleKeyDown}
-      class="block h-10 w-1/2 rounded-md bg-surface0"
+      class={`border outline-none ${filteredSites.length === 0 ? "rounded-md" : "rounded-t-md "}`}
     />
 
-    {#if sanitizedTxt.length !== 0}
-      {#each filteredSites as site}
-        <p>{site.name}</p>
-      {/each}
-    {/if}
+    {#each filteredSites as site, i}
+      <button
+        on:click={() => (txt = site.name)}
+        class={`flex items-center gap-4 border ${
+          i === filteredSites.length - 1 ? "rounded-b-md border-t-0" : "border-y-0"
+        }`}
+      >
+        <img src={site.icon} alt="Site Icon" class="ml-4" />
+        <span>{site.name}</span>
+      </button>
+    {/each}
   </div>
 </body>
