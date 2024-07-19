@@ -91,6 +91,14 @@
   onMount(getDateTime);
   setInterval(getDateTime, 1000);
 
+  import { pipe, string, nonEmpty, trim, url, safeParse } from "valibot";
+  const UrlSchema = pipe(
+    string(),
+    nonEmpty("The Search should not be empty."),
+    trim(),
+    url("The String is not a valid URL.")
+  );
+
   let txt = "";
   $: lwrTxt = txt.toLowerCase();
 
@@ -106,9 +114,7 @@
   ];
 
   $: filteredSites =
-    lwrTxt === ""
-      ? []
-      : sites.filter(({ name }) => name.toLowerCase().includes(lwrTxt));
+    lwrTxt === "" ? [] : sites.filter(({ name }) => name.toLowerCase().includes(lwrTxt));
 
   function handleKeyDown(e: KeyboardEvent) {
     console.debug(filteredSites);
@@ -118,12 +124,19 @@
 
     if (filteredSites.length !== 0) {
       window.location.href = filteredSites[0].url;
-    } else {
-      const encoded = encodeURI(
-        `https://search.sapti.me/search?q=${txt}&category_general=&language=auto&time_range=&safesearch=2&theme=simple`
-      );
-      window.location.href = encoded;
+      return;
     }
+
+    const parsed = safeParse(UrlSchema, txt);
+    if (parsed.success) {
+      window.location.href = parsed.output;
+      return;
+    }
+
+    const encoded = encodeURI(
+      `https://search.sapti.me/search?q=${txt}&category_general=&language=auto&time_range=&safesearch=2&theme=simple`
+    );
+    window.location.href = encoded;
   }
 </script>
 
