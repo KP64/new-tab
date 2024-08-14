@@ -1,6 +1,6 @@
 import catppuccin from "@catppuccin/tailwindcss";
 
-/** @type {import('tailwindcss').Config} */
+import Config from 'tailwindcss';
 export default {
   content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
@@ -12,4 +12,4 @@ export default {
       defaultFlavour: "mocha"
     })
   ]
-};
+} satisfies Config;
