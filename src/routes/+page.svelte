@@ -6,7 +6,7 @@
 
   import { invalidate } from "$app/navigation";
 
-  const icons: any = import.meta.glob(["$lib/assets/**/*.svg"], {
+  const icons: Record<string, string> = import.meta.glob(["$lib/assets/**/*.svg"], {
     eager: true,
     query: "?url",
     import: "default"

@@ -18,6 +18,7 @@
             bun
             nodejs
             svelte-language-server
+            typescript-language-server
           ];
 
           LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
